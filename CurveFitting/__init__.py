@@ -4,6 +4,9 @@ from scipy.optimize import fmin
 from bisect import bisect_left, bisect_right
 from scipy.stats import norm
 
+class NoMaximaException(Exception):
+    pass
+
 def get_kde(data):
     kernel = gaussian_kde(data)
     kernel.silverman_factor()
@@ -69,6 +72,9 @@ def get_maxima(x,y,stringency=2):
             continue
         if all(positive[i - stringency : i]) and all(negative[i : i + stringency]):
             points.append(i-1)
+    if not points:
+        raise NoMaximaException('Could not find any maxima with a stringency of %s')
+
     return points
 
 def get_minima(x,y,stringency=2):
@@ -88,6 +94,16 @@ def get_last_maximum(x,y,stringency=2):
     maxima = get_maxima(x, y, stringency)
 
     return maxima[-1]
+
+def recursive_last_maximum(x, y, stringency):
+    if stringency == 0:
+        raise NoMaximaException('Could not find any maxima at all!')
+    try:
+        last_max = get_last_maximum(x, y, stringency)
+    except NoMaximaException:
+        print 'couldnt get a maximum for stringency = {0}. Trying stringency = {1}'.format(stringency,stringency-1)
+        last_max = recursive_last_maximum(x, y, stringency-1)
+    return last_max
 
 def split_line(x, y, split_point):
 
