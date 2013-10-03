@@ -3,6 +3,7 @@ from scipy.stats import gaussian_kde
 from scipy.optimize import fmin
 from bisect import bisect_left, bisect_right
 from scipy.stats import norm
+import sys
 
 class NoMaximaException(Exception):
     pass
@@ -101,7 +102,7 @@ def recursive_last_maximum(x, y, stringency):
     try:
         last_max = get_last_maximum(x, y, stringency)
     except NoMaximaException:
-        print 'couldnt get a maximum for stringency = {0}. Trying stringency = {1}'.format(stringency,stringency-1)
+        sys.stderr.write( 'couldnt get a maximum for stringency = {0}. Trying stringency = {1}\n'.format(stringency,stringency-1) )
         last_max = recursive_last_maximum(x, y, stringency-1)
     return last_max
 
