@@ -10,13 +10,14 @@ def read(fname):
 
 setup(
     name = "CurveFitting",
-    version = "0.0.1",
+    version = "0.0.2",
     author = "Rob Beagrie",
     author_email = "rob@beagrie.com",
     description = ("A package containing some utilities for curve fitting in python."),
     license = "BSD",
     packages=['CurveFitting'],
     long_description=read('README'),
+    install_requires=['numpy>=1.8.0', 'scipy>=0.13.0'],
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Topic :: Utilities",
